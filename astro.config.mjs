@@ -30,7 +30,7 @@ const oklchToHex = (str) => {
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://fuwari.vercel.app/",
+  site: "https://blog.i5nipe.com/",
   base: "/",
   trailingSlash: "always",
   integrations: [
@@ -111,8 +111,7 @@ export default defineConfig({
         }
       }
     },
-    css: {
-      preprocessorOptions: {
+    css: { preprocessorOptions: {
         stylus: {
           define: {
             oklchToHex: oklchToHex,
