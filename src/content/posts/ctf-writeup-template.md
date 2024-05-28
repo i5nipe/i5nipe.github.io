@@ -1,5 +1,5 @@
 ---
-title: Ctf Writeup Template.md
+title: Ctf Writeup Template
 published: 2024-05-27
 description: 'Template for write-ups'
 image: ''
