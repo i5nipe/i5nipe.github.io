@@ -3,7 +3,7 @@ title:  HTB Bizness Writeup
 published: 2024-05-27
 description: 'Writeup of "Bizness" from Hack The Box'
 image: './icon.png'
-tags: [CTF, Writeup, Go, Apache OFBiz, Hash cracking, SHA1, HTB, Java Deserialization, ysoserial]
+tags: [CVE-2023-49070,CVE-2023-51467, Writeup, Go, Apache OFBiz, Hash cracking, SHA1, HTB, Java Deserialization, ysoserial]
 category: 'CTF writeup'
 draft: false
 ---
@@ -75,7 +75,7 @@ stty raw -echo;fg
 ```
 :::
 
-# Privilege escation
+# Privilege escalation
 
 ## Reconnaissance
 
@@ -85,7 +85,7 @@ ss -ltnp # Show the listening ports on the host
 sudo -l # Check for sudo privileges (note: password require)
 ```
 
-Next, I searched for passwords in Apache OFBiz configuration files but without success.Eventually, I found a file named _docker/docker-entrypoint.sh_ which contained the following code that generates a **SHA1 hash**:
+Next, I searched for passwords in Apache OFBiz configuration files but without success. Eventually, I found a file named _docker/docker-entrypoint.sh_ which contained the following code that generates a **SHA1 hash**:
 
 ```bash
 load_admin_user() {
