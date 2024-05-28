@@ -5,7 +5,7 @@ description: 'Writeup of "Bizness" from Hack The Box'
 image: './icon.png'
 tags: [CTF, Writeup, Go, Apache OFBiz, Hash cracking, SHA1, HTB, Java Deserialization, ysoserial]
 category: 'CTF writeup'
-draft: true
+draft: false
 ---
 
 # Overview
