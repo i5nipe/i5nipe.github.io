@@ -39,7 +39,7 @@ Opening the website we got the folowing page:
 #### Directory brute force
 I immediately have ran _ffuf_ with the wordlist _common.txt_ from [seclist](https://github.com/danielmiessler/SecLists) to see if are any hidden directories on the page:</br>
 ```bash
-ffuf -u https://bizness.htb/FUZZ seclists/Discovery/Web-Content/common.txt
+ffuf -u https://bizness.htb/FUZZ -w seclists/Discovery/Web-Content/common.txt -fs 0
 ------------------------
 control         [Status: 200, Size: 34633, Words: 10468]
 index.html      [Status: 200, Size: 27200, Words: 92189]
