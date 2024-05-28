@@ -40,7 +40,7 @@ export default defineConfig({
       animationClass: 'transition-',
       containers: ['main'],
       smoothScrolling: true,
-      cache: true,
+      cache: false,
       preload: true,
       accessibility: true,
       globalInstance: true,
