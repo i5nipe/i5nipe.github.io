@@ -37,7 +37,7 @@ Opening the website we got the folowing page:
 ![Bizness main page](./website.png)
 
 #### Directory brute force
-I immediately have ran _fuff_ with the wordlist _common.txt_ from [seclist](https://github.com/danielmiessler/SecLists) to see if are any hidden directories on the page:</br>
+I immediately have ran _ffuf_ with the wordlist _common.txt_ from [seclist](https://github.com/danielmiessler/SecLists) to see if are any hidden directories on the page:</br>
 ```bash
 ffuf -u https://bizness.htb/FUZZ seclists/Discovery/Web-Content/common.txt
 ------------------------
