@@ -30,16 +30,9 @@ const ogOptions: SatoriOptions = {
 
 const markup = (title: string, published: Date, description?: string, category?: string, tags?: string[]) =>
 	html`
-    <div tw="flex flex-col w-full h-full justify-center bg-amber-800">
-      <div tw="bg-gray-50 flex w-full">
-        <div tw="flex flex-col md:flex-row w-full py-12 px-8 items-center">
-          <h2 tw="flex flex-col font-bold tracking-tight text-gray-900 text-left">
-            <span tw="text-3xl">${title}</span>
-            <span tw="text-amber-600 font-light text-xl">${description}</span>
-          </h2>
-        </div>
-      </div>
-    </div>
+  <div style="background-image: url(${"https://blog.i5nipe.com/" + siteConfig.banner.src}); height: 100vh; display: flex; align-items: center; justify-content: center; color: white; font-size: 3em; font-weight: bold;">
+    Hello word
+   </div>
   `;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
@@ -61,7 +54,7 @@ async function getOpenGraphData() {
         return new Response(png, {
           headers: {
             "Content-Type": "image/png",
-            "Cache-Control": "public, max-age=31536000, immutable",
+            "Cache-Control": "public, max-age=600, immutable",
           },
         });
       },
