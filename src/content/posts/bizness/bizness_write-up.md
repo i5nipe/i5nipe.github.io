@@ -20,7 +20,7 @@ draft: false
 
 #### Port scan
 To start, we need to identify all the ports that is running on the target machine. We can use the following Nmap command:</br>
-```bash
+``` bash
 nmap -sV -sC 10.10.11.252 -p- -vv -oA nmap/port_scan
 
 PORT     STATE    SERVICE  REASON      VERSION
