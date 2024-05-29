@@ -3,7 +3,7 @@ title:  HTB Bizness Writeup
 published: 2024-05-27
 description: 'Writeup of "Bizness" from Hack The Box'
 image: './icon.png'
-tags: [CVE-2023-49070,CVE-2023-51467, Writeup, Go, Apache OFBiz, Hash cracking, SHA1, HTB, Java Deserialization, ysoserial]
+tags: [Go, Apache OFBiz, Hash cracking, SHA1, HTB, Java Deserialization, ysoserial]
 category: 'CTF writeup'
 draft: false
 ---
