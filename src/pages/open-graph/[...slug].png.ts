@@ -5,26 +5,19 @@ import { getCollection } from 'astro:content';
 import { Resvg } from "@resvg/resvg-js";
 import { siteConfig } from '@/config';
 
-import Roboto300 from "@assets/roboto_5.0.12_latin-400-normal.ttf";
-import Roboto700 from "@assets/roboto_5.0.8_latin-700-normal.ttf";
+import Adelle from "@assets/adelle-mono-bold.ttf"
 
 const ogOptions: SatoriOptions = {
 	width: 1200,
 	height: 630,
 	// debug: true,
 	fonts: [
-		{
-			name: "Roboto",
-			data: Buffer.from(Roboto300),
-			weight: 400,
-			style: "normal",
-		},
-		{
-			name: "Roboto",
-			data: Buffer.from(Roboto700),
-			weight: 700,
-			style: "normal",
-		},
+    {
+      name: "Adelle",
+      data: Buffer.from(Adelle),
+      weight: 700,
+      style: "normal",
+    },
 	],
 };
 
@@ -35,7 +28,7 @@ const markup = (title: string, published: Date, description?: string, category?:
     <p style="color: #E3C3FA; font-size: 3.0em; font-weight: bold; margin: 0;">${title}</p>
   </div>
   <div style="display: flex; align-items: center; justify-content: center; flex: 1;">
-    <p style="font-size: 3em; font-weight: bold; text-align: center; margin: 0;">${description}</p>
+    <p style="font-size: 3.5em; font-weight: bold; text-align: center; margin: 0;">${description}</p>
   </div>
   </div>
   `;
