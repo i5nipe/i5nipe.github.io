@@ -86,6 +86,7 @@ const siteLang = siteConfig.lang.replace('_', '-')
     <meta property="og:url" content={Astro.url}>
     <meta property="og:title" content={pageTitle}>
     <meta property="og:description" content={description || pageTitle}>
+    <meta property="og:image" content={profileConfig.avatar}>
 
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content={Astro.url}>
@@ -140,9 +141,10 @@ const siteLang = siteConfig.lang.replace('_', '-')
 		</div>
 		<slot />
 		</GlobalStyles>
-    <!-- 100% privacy-first analytics -->
-    <script data-collect-dnt="true" async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif?collect-dnt=true" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
+
+    <!-- <!-- 100% privacy-first analytics --> -->
+    <!-- <script data-collect-dnt="true" async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script> -->
+    <!-- <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif?collect-dnt=true" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript> -->
 	</body>
 </html>
 <style is:global>
