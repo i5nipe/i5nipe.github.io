@@ -11,12 +11,12 @@ import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs"
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs"
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs"
 import remarkDirective from "remark-directive" /* Handle directives */
-import remarkDirectiveRehype from 'remark-directive-rehype' /* Pass directives to rehype */
 import rehypeComponents from "rehype-components"; /* Render the custom directive content */
 import svelte from "@astrojs/svelte"
 import swup from '@swup/astro';
 import sitemap from '@astrojs/sitemap';
 import {parseDirectiveNode} from "./src/plugins/remark-directive-rehype.js";
+import { rawFonts } from "./src/plugins/vite-raw-fonts.mjs"
 
 const oklchToHex = (str) => {
   const DEFAULT_HUE = 250
@@ -111,6 +111,9 @@ export default defineConfig({
         }
       }
     },
+    plugins: [
+      rawFonts([".woff2",".ttf"])
+    ],
     css: { preprocessorOptions: {
         stylus: {
           define: {

@@ -17,11 +17,18 @@ interface Props {
 	title: string;
 	banner: string;
 	description?: string;
+  slug: string | undefined;
 }
 
-let { title, banner, description } = Astro.props;
+let { title, banner, description, slug } = Astro.props;
 
 const isHomePage = pathsEqual(Astro.url.pathname, '/');
+
+let ogImageSrc;
+
+ogImageSrc = siteConfig.siteOGImage.enable ? (Astro.site ? `${Astro.site.origin}${siteConfig.siteOGImage.src}` : siteConfig.siteOGImage.src) : false;
+// if postOGImageDynamic is enabled, use the generated one as the og:image
+if (siteConfig.postOGImageDynamic && slug) ogImageSrc = Astro.site ? `${Astro.site.origin}/open-graph/${slug}.png` : false;
 
 const testPathName = Astro.url.pathname;
 
@@ -93,6 +100,7 @@ const siteLang = siteConfig.lang.replace('_', '-')
     <meta name="twitter:description" content={description || pageTitle}>
 
 		<meta name="viewport" content="width=device-width" />
+    {ogImageSrc && <meta property="og:image" content={ogImageSrc}/>}
 		<meta name="generator" content={Astro.generator} />
 		{favicons.map(favicon => (
 			<link rel="icon"
