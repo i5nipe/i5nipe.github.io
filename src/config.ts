@@ -29,7 +29,7 @@ export const siteConfig: SiteConfig = {
 
   siteOGImage: {
     enable: true,
-    src: '/demo-opengraph.png',
+    src: '/i5nipe-articles.png',
   },
   postOGImageDynamic: true,
   
