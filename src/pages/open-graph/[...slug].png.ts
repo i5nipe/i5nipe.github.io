@@ -30,9 +30,14 @@ const ogOptions: SatoriOptions = {
 
 const markup = (title: string, published: Date, description?: string, category?: string, tags?: string[]) =>
 	html`
-  <div style="background-image: url(${"https://blog.i5nipe.com/" + siteConfig.banner.src}); height: 100vh; display: flex; align-items: center; justify-content: center; color: white; font-size: 3em; font-weight: bold;">
-    Hello word
-   </div>
+  <div style="background-image: url(${"https://blog.i5nipe.com/" + siteConfig.banner.src}); height: 100vh; display: flex; flex-direction: column; justify-content: space-between; color: #FCF7FF; padding: 20px;">
+  <div style="display: flex; flex-direction: column;">
+    <p style="color: #E3C3FA; font-size: 3.0em; font-weight: bold; margin: 0;">${title}</p>
+  </div>
+  <div style="display: flex; align-items: center; justify-content: center; flex: 1;">
+    <p style="font-size: 3em; font-weight: bold; text-align: center; margin: 0;">${description}</p>
+  </div>
+  </div>
   `;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
