@@ -1,5 +1,5 @@
 ---
-title:  HTB Bizness Writeup
+title:  Write-up Bizness
 published: 2024-05-27
 description: 'Writeup of "Bizness" from Hack The Box'
 image: './icon.png'
