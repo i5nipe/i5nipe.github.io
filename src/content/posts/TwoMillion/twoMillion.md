@@ -1,11 +1,11 @@
 ---
 title: Writeup TwoMillion
-published: 2024-06-06
+published: 2024-06-05
 description: 'Writeup of machine "TwoMillion" from HTB'
 image: './TwoMillion.png'
 tags: [CTF, HTB, API, Kernel exploit, JavaScript, OverlayFS]
 category: 'CTF writeup'
-draft: true
+draft: false
 ---
 
 # Overview
