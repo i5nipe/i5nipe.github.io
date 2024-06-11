@@ -5,7 +5,7 @@ description: 'Writeup of linux machine "CozyHosting" from HTB'
 image: 'CozyHosting.png'
 tags: [CTF, HTB, Linux, Spring Boot, PostgresSQL, Command Injection, Java, Sudo]
 category: 'CTF writeup'
-draft: true
+draft: false
 ---
 
 # Overview
