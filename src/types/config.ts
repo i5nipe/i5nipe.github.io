@@ -25,6 +25,8 @@ export type SiteConfig = {
      * - Relative to the /src directory.
      * - Relative to the /public directory if it starts with '/' */
     src: string
+
+    position?: string
   }
   /** A flag indicating whether to enable the Open Graph image. */
   siteOGImage: {

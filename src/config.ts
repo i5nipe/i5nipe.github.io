@@ -17,6 +17,7 @@ export const siteConfig: SiteConfig = {
   banner: {
     enable: true,
     src: '/cover.png',   // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+    position: 'center',
   },
 
   favicon: [    // Leave this array empty to use the default favicon
