@@ -3,7 +3,7 @@ title: Writeup CozyHosting
 published: 2024-06-10
 description: 'Writeup of linux machine "CozyHosting" from HTB'
 image: 'CozyHosting.png'
-tags: [CTF, HTB, Linux, Spring Boot, PostgresSQL, Command Injection, Java, Sudo]
+tags: [CTF, HTB, Linux, Spring Boot, PostgresSQL, Command Injection, Java, Sudo, OSCP]
 category: 'CTF writeup'
 draft: false
 ---
@@ -39,7 +39,7 @@ After going to the webpage and adding `cozyhosting.htb` to my `/etc/hosts` file,
 
 With no more informations, I started **brute forcing** the webpage to find files and directories with `ffuf`. 
 ```
-ffuf -w $smallw -u http://cozyhosting.htb/FUZZ
+❯ ffuf -w $smallw -u http://cozyhosting.htb/FUZZ
 index                   [Status: 200]
 admin                   [Status: 401]
 login                   [Status: 200]
@@ -63,7 +63,7 @@ I searched the error message on _Google_ and discovered that it is a common erro
 
 With that in mind, I ran `ffuf` again, but this time with a proper wordlist for **Spring_Boot**. We found the following endpoits, and by making a **GET** request to `/actuator`, the server send back **all the endpoints** under `/actuator`.
 ```bash
-ffuf -u http://cozyhosting.htb/FUZZ -w $seclist/Discovery/Web-Content/spring-boot.txt -o fuzz
+❯ ffuf -u http://cozyhosting.htb/FUZZ -w $seclist/Discovery/Web-Content/spring-boot.txt -o fuzz
 ❯ cat fuzz | jq '.results[].url'
 "http://cozyhosting.htb/actuator/env/home"
 "http://cozyhosting.htb/actuator/env"
@@ -117,7 +117,7 @@ The `/actuator/mappings` returns a json with **all endpoints** of the website.
 
 The `POST` to `/executessh` caught my attention, but when I tried sending the **request**, it **returned** the http code _400 Bad Request_. Maybe it is expecting parameters? So I tried to **brute force** it again with `ffuf` but **don't find anything**.
 
-`ffuf -u http://cozyhosting.htb/executessh -X POST -w $seclist/Discovery/Web-Content/api/actions.txt -mc all -d 'FUZZ=sleep 5' -ft '<900'`
+`❯ ffuf -u http://cozyhosting.htb/executessh -X POST -w $seclist/Discovery/Web-Content/api/actions.txt -mc all -d 'FUZZ=sleep 5' -ft '<900'`
 
 The `GET` to `/actuator/sessions` actually give us some cookie values for the user `kanderson`. 
 
@@ -138,7 +138,6 @@ I entered some normal inputs for **Hostname** and **Username** and still got the
 
 ![Pic 8](./host_not_added.png)
 > _Figure 8_: **Error: verification failed.**
-
 I suspected it was running a bash command like `ssh $USER@$HOSTNAME` in the backend. So I need to find out what is the protections they are using and bypassing it to the a reverse shell.
 
 The request is the `POST` to `/executessh` that I saw before but don't find anything while brute forcing it. Now I can see that the request needed a `host` and `username` parameters to function normally. When I tried sending this basic command injection payload(`;sleep 5;`) in the `host` parameter, the server returned `Invalid hostname!`, as shown in __Figure 9__. 
