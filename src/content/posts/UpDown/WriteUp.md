@@ -5,7 +5,7 @@ description: 'Writeup of machine "UpDown" from HTB'
 image: './UpDown.png'
 tags: [CTF, HTB, OSCP, Python, PHP, File Upload Bypass, Git, Source Code, Regex]
 category: 'CTF writeup'
-draft: true
+draft: false
 ---
 
 # Overview
