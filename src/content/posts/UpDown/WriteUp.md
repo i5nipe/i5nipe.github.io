@@ -1,6 +1,6 @@
 ---
 title: Htb UpDown Writeup
-published: 2024-02-09
+published: 2024-09-02
 description: 'Writeup of machine "UpDown" from HTB'
 image: './UpDown.png'
 tags: [CTF, HTB, OSCP, Python, PHP, File Upload Bypass, Git, Source Code, Regex]
