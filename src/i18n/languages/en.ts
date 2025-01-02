@@ -35,5 +35,4 @@ export const en: Translation = {
   [Key.author]: 'Author',
   [Key.publishedAt]: 'Published at',
   [Key.license]: 'License',
-
 }
