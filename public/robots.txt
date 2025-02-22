@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /archive/tag/*
+Allow: /
+
+Sitemap: https://blog.i5nipe.com/sitemap-index.xml
