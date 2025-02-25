@@ -1,5 +1,5 @@
 ---
-title: HTB BoardLight Writeup 
+title: "Hack the Box: BoardLight - Writeup" 
 published: 2024-09-28
 description: "Writeup of machine 'BoardLight' from HTB"
 image: 'BoardLight.png'

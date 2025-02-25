@@ -1,5 +1,5 @@
 ---
-title: CozyHosting Writeup
+title: "Hack the Box: CozyHosting - Writeup"
 published: 2024-06-10
 description: 'Writeup of linux machine "CozyHosting" from HTB'
 image: 'CozyHosting.png'

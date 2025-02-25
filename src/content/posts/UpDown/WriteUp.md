@@ -1,5 +1,5 @@
 ---
-title: Htb UpDown Writeup
+title: "Hack the Box: UpDown - Writeup"
 published: 2024-09-02
 description: 'Writeup of machine "UpDown" from HTB'
 image: './UpDown.png'

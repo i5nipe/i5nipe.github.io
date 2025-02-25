@@ -1,5 +1,5 @@
 ---
-title: Writeup TwoMillion
+title: "Hack the Box: TwoMillion - Writeup"
 published: 2024-06-05
 description: 'Writeup of machine "TwoMillion" from HTB'
 image: './TwoMillion.png'
