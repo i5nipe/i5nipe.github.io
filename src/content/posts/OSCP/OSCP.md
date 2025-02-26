@@ -18,7 +18,8 @@ If you want to know more about it, check the official site: [OSCP Exam Guide](ht
 
 I worked full-time as a **white-box pentester** for a year, and before that, I participated in bug bounties and completed several cybersecurity courses and CTFs. After being laid off, I struggled to get interviews and decided to focus on improving my skills. I earned the **eCPPT** (a hands-on certification similar to OSCP) and the **eMAPT** (focused on mobile security, a field I'm passionate about).
 
-Even with my experience, I knew the OSCP was very hard. I saw skilled people fail, and I didn’t want to take any risks. Later, I found out that OffSec had given an **impossible** to solve set of machines to these professionals. This relieved my stress a little because I knew they should have passed the exam easily.
+<!-- Even with my experience, I knew the OSCP was very hard. I saw skilled people fail, and I didn’t want to take any risks. Later, I found out that OffSec had given an **impossible** to solve set of machines to these professionals. This relieved my stress a little because I knew they should have passed the exam easily.
+--!>
 
 # The 272 Hours of Preparation – My Study Plan & Resources
 
