@@ -53,7 +53,17 @@ export default defineConfig({
       },
     }),
     svelte(),
-    sitemap(),
+    sitemap({
+      filter: (page) => {
+        // Exclude URLs that start with /page/ or /archive/tag/
+        const excludePatterns = [
+          'https://blog.i5nipe.com/page/',
+          'https://blog.i5nipe.com/archive/tag/',
+          'https://blog.i5nipe.com/archive/category/'
+        ];
+        return !excludePatterns.some(pattern => page.startsWith(pattern));
+      }
+    }),
     Compress({
       CSS: false,
       Image: false,
