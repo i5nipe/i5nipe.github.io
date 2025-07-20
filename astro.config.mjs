@@ -17,6 +17,7 @@ import remarkMath from "remark-math";
 import remarkSectionize from "remark-sectionize";
 import { expressiveCodeConfig } from "./src/config.ts";
 import { pluginLanguageBadge } from "./src/plugins/expressive-code/language-badge.ts";
+import { pluginCodeOutput } from "./src/plugins/expressive-code/code-output.ts"
 import { AdmonitionComponent } from "./src/plugins/rehype-component-admonition.mjs";
 import { GithubCardComponent } from "./src/plugins/rehype-component-github-card.mjs";
 import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
@@ -61,7 +62,8 @@ export default defineConfig({
 				pluginCollapsibleSections(),
 				pluginLineNumbers(),
 				pluginLanguageBadge(),
-				pluginCustomCopyButton()
+				pluginCustomCopyButton(),
+        pluginCodeOutput(),
 			],
 			defaultProps: {
 				wrap: true,
@@ -72,27 +74,27 @@ export default defineConfig({
 				},
 			},
 			styleOverrides: {
-				codeBackground: "var(--codeblock-bg)",
+//				codeBackground: "var(--codeblock-bg)",
 				borderRadius: "0.75rem",
-				borderColor: "none",
+//				borderColor: "none",
 				codeFontSize: "0.875rem",
 				codeFontFamily: "'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
 				codeLineHeight: "1.5rem",
 				frames: {
-					editorBackground: "var(--codeblock-bg)",
-					terminalBackground: "var(--codeblock-bg)",
-					terminalTitlebarBackground: "var(--codeblock-topbar-bg)",
-					editorTabBarBackground: "var(--codeblock-topbar-bg)",
-					editorActiveTabBackground: "none",
-					editorActiveTabIndicatorBottomColor: "var(--primary)",
-					editorActiveTabIndicatorTopColor: "none",
-					editorTabBarBorderBottomColor: "var(--codeblock-topbar-bg)",
-					terminalTitlebarBorderBottomColor: "none"
+//					editorBackground: "var(--codeblock-bg)",
+//					terminalBackground: "var(--codeblock-bg)",
+//					terminalTitlebarBackground: "var(--codeblock-topbar-bg)",
+//					editorTabBarBackground: "var(--codeblock-topbar-bg)",
+//					editorActiveTabBackground: "none",
+//					editorActiveTabIndicatorBottomColor: "var(--primary)",
+//					editorActiveTabIndicatorTopColor: "none",
+//					editorTabBarBorderBottomColor: "var(--codeblock-topbar-bg)",
+//					terminalTitlebarBorderBottomColor: "none"
 				},
 				textMarkers: {
 					delHue: 0,
-					insHue: 180,
-					markHue: 250
+					insHue: 180
+//					markHue: 340
 				}
 			},
 			frames: {

@@ -17,8 +17,8 @@ draft: false
 # Enumeration
 
 I started with a full TCP port scan using `Nmap`. 
-```bash
-nmap -p- -sV -sC -oA nmap/tcp --min-rate=1000 -v 10.10.11.177
+```bash "22/tcp" "80/tcp" 
+> nmap -p- -sV -sC -oA nmap/tcp --min-rate=1000 -v 10.10.11.177
 Nmap scan report for 10.10.11.177
 PORT   STATE SERVICE VERSION
 22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.5 (Ubuntu Linux; protocol 2.0)
@@ -56,11 +56,11 @@ The diretory bruteforcing returns some more results but the more intesting one i
 
 ::github{repo='arthaud/git-dumper'}
 
-```bash
-❯ git-dumper http://siteisup.htb/dev git
-❯ cd git
-❯ git checkout main
-❯ ls -la 
+```bash {8} withOutput collapse={1-6} collapseStyle=collapsible-end
+> git-dumper http://siteisup.htb/dev git
+> cd git
+> git checkout main
+> ls -la 
 total 40
 drwxrwxr-x 3 isnipe isnipe 4096 Jul  3 16:54 .
 drwxrwxr-x 5 isnipe isnipe 4096 Jul  8 18:07 ..
@@ -70,7 +70,7 @@ drwxrwxr-x 7 isnipe isnipe 4096 Jul  8 18:37 .git
 -rw-rw-r-- 1 isnipe isnipe  147 Jun 28 22:14 changelog.txt
 -rw-rw-r-- 1 isnipe isnipe 3145 Jul  3 16:54 checker.php
 -rw-rw-r-- 1 isnipe isnipe  273 Jun 28 22:14 index.php
--rw-rw-r-- 1 isnipe isnipe 5531 Jun 28 22:10 stylesheet.css
+-rw-rw-r-- 1 isnipe isnipe 5531 Jun 28 22:10 stylesheet.css 
 ```
 
 Reading the content of the file `.htaccess` I discovery that the webserver on `dev.siteisup.htb` will ony responde if the request have a special header, Like demostrated at _Figure 2_ and _Figure 3_.
