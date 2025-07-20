@@ -54,3 +54,7 @@ export type LicenseConfig = {
   name: string
   url: string
 }
+
+export type ExpressiveCodeConfig = {
+  theme: string;
+}
