@@ -8,20 +8,6 @@ export function pathsEqual(path1: string, path2: string) {
 }
 
 function joinUrl(...parts: string[]): string {
-<<<<<<< HEAD
-  const joined = parts.join('/')
-  return joined.replace(/\/+/g, '/')
-}
-
-export function getPostUrlBySlug(slug: string): string {
-  return url(`/posts/${slug}/`)
-}
-
-export function getCategoryUrl(category: string): string {
-  if (category === i18n(i18nKey.uncategorized))
-    return url('/archive/category/uncategorized/')
-  return url(`/archive/category/${category}/`)
-=======
 	const joined = parts.join("/");
 	return joined.replace(/\/+/g, "/");
 }
@@ -43,7 +29,6 @@ export function getCategoryUrl(category: string | null): string {
 	)
 		return url("/archive/?uncategorized=true");
 	return url(`/archive/?category=${encodeURIComponent(category.trim())}`);
->>>>>>> upstream/main
 }
 
 export function getDir(path: string): string {
@@ -55,9 +40,5 @@ export function getDir(path: string): string {
 }
 
 export function url(path: string) {
-<<<<<<< HEAD
-  return joinUrl('', import.meta.env.BASE_URL, path)
-=======
 	return joinUrl("", import.meta.env.BASE_URL, path);
->>>>>>> upstream/main
 }

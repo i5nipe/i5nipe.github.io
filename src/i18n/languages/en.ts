@@ -2,17 +2,10 @@ import Key from "../i18nKey";
 import type { Translation } from "../translation";
 
 export const en: Translation = {
-<<<<<<< HEAD
-  [Key.home]: 'Home',
-  [Key.about]: 'About',
-  [Key.archive]: 'Archive',
-  [Key.search]: 'Search',
-=======
 	[Key.home]: "Home",
 	[Key.about]: "About",
 	[Key.archive]: "Archive",
 	[Key.search]: "Search",
->>>>>>> upstream/main
 
 	[Key.tags]: "Tags",
 	[Key.categories]: "Categories",

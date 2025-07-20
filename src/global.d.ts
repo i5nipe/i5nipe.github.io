@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import type { AstroIntegration } from '@swup/astro'
-
-declare global {
-  interface Window {
-    // type from '@swup/astro' is incorrect
-    swup: AstroIntegration
-  }
-=======
 import type { AstroIntegration } from "@swup/astro";
 
 declare global {
@@ -47,5 +38,4 @@ interface SearchResult {
 	raw_content?: string;
 	raw_url?: string;
 	sub_results?: SearchResult[];
->>>>>>> upstream/main
 }

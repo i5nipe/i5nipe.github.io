@@ -1,24 +1,3 @@
-<<<<<<< HEAD
-import { getCollection } from 'astro:content'
-import type { BlogPostData } from '@/types/config'
-import I18nKey from '@i18n/i18nKey'
-import { i18n } from '@i18n/translation'
-
-export async function getSortedPosts(): Promise<
-  { body: string, data: BlogPostData; slug: string }[]
-> {
-  const allBlogPosts = (await getCollection('posts', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true
-  })) as unknown as { body: string, data: BlogPostData; slug: string }[]
-
-  const sorted = allBlogPosts.sort(
-    (a: { data: BlogPostData }, b: { data: BlogPostData }) => {
-      const dateA = new Date(a.data.published)
-      const dateB = new Date(b.data.published)
-      return dateA > dateB ? -1 : 1
-    },
-  )
-=======
 import { type CollectionEntry, getCollection } from "astro:content";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
@@ -40,7 +19,6 @@ async function getRawSortedPosts() {
 
 export async function getSortedPosts() {
 	const sorted = await getRawSortedPosts();
->>>>>>> upstream/main
 
 	for (let i = 1; i < sorted.length; i++) {
 		sorted[i].data.nextSlug = sorted[i - 1].slug;
@@ -74,19 +52,6 @@ export type Tag = {
 };
 
 export async function getTagList(): Promise<Tag[]> {
-<<<<<<< HEAD
-  const allBlogPosts = await getCollection<'posts'>('posts', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true
-  })
-
-  const countMap: { [key: string]: number } = {}
-  allBlogPosts.map((post: { data: { tags: string[] } }) => {
-    post.data.tags.map((tag: string) => {
-      if (!countMap[tag]) countMap[tag] = 0
-      countMap[tag]++
-    })
-  })
-=======
 	const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
@@ -98,7 +63,6 @@ export async function getTagList(): Promise<Tag[]> {
 			countMap[tag]++;
 		});
 	});
->>>>>>> upstream/main
 
 	// sort tags
 	const keys: string[] = Object.keys(countMap).sort((a, b) => {
@@ -115,22 +79,6 @@ export type Category = {
 };
 
 export async function getCategoryList(): Promise<Category[]> {
-<<<<<<< HEAD
-  const allBlogPosts = await getCollection<'posts'>('posts', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true
-  })
-  const count: { [key: string]: number } = {}
-  allBlogPosts.map((post: { data: { category: string | number } }) => {
-    if (!post.data.category) {
-      const ucKey = i18n(I18nKey.uncategorized)
-      count[ucKey] = count[ucKey] ? count[ucKey] + 1 : 1
-      return
-    }
-    count[post.data.category] = count[post.data.category]
-      ? count[post.data.category] + 1
-      : 1
-  })
-=======
 	const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
@@ -141,7 +89,6 @@ export async function getCategoryList(): Promise<Category[]> {
 			count[ucKey] = count[ucKey] ? count[ucKey] + 1 : 1;
 			return;
 		}
->>>>>>> upstream/main
 
 		const categoryName =
 			typeof post.data.category === "string"
