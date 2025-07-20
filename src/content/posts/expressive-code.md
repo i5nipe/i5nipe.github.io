@@ -53,13 +53,13 @@ console.log('Title attribute example')
 ---
 
 ```html
-<!-- src/content/index.html -->
+<!-- inicio/content/index.html -->
 <div>File name comment example</div>
 ```
 
 #### Terminal frames
 
-```bash
+```bash frame=none
 echo "This terminal frame has no title"
 ```
 
@@ -79,7 +79,7 @@ echo "Look ma, no frame!"
 
 ```ps frame="code" title="PowerShell Profile.ps1"
 # Without overriding, this would be a terminal frame
-function Watch-Tail { Get-Content -Tail 20 -Wait $args }
+function Watch-Tail { ^[1m Get-Content -Tail 20 -Wait $args }
 New-Alias tail Watch-Tail
 ```
 
