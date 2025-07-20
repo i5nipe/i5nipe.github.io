@@ -110,6 +110,7 @@
     .btn-regular-dark.success {
         @apply bg-[oklch(0.75_0.14_var(--hue))] dark:bg-[oklch(0.75_0.14_var(--hue))]
     }
+<<<<<<< HEAD
 
     .copy-btn-icon {
         @apply absolute top-1/2 left-1/2 transition -translate-x-1/2 -translate-y-1/2
@@ -126,6 +127,8 @@
     .copy-btn.success .success-icon {
         @apply opacity-100
     }
+=======
+>>>>>>> upstream/main
 }
 
 .custom-md img, #post-cover img {
@@ -154,4 +157,8 @@
 
 .collapsed {
     height: var(--collapsedHeight);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> upstream/main

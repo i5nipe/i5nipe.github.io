@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 import Profile from './Profile.astro'
 import Tag from './Tags.astro'
 import Categories from './Categories.astro'
@@ -12,6 +13,17 @@ interface Props {
 
 const className = Astro.props.class
 const headings = Astro.props.headings
+=======
+import type { MarkdownHeading } from "astro";
+import Categories from "./Categories.astro";
+import Profile from "./Profile.astro";
+import Tag from "./Tags.astro";
+
+interface Props {
+	class?: string;
+	headings?: MarkdownHeading[];
+}
+>>>>>>> upstream/main
 
 ---
 <div id="sidebar" class:list={[className, "w-full"]}>
