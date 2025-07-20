@@ -1,6 +1,6 @@
 ---
 import BackToTop from "@components/control/BackToTop.astro";
-import Footer from "@components/Footer.astro";
+
 import Navbar from "@components/Navbar.astro";
 import SideBar from "@components/widget/SideBar.astro";
 import type { MarkdownHeading } from "astro";
@@ -87,15 +87,11 @@ const mainPanelTop = siteConfig.banner.enable
                     <!-- the overflow-hidden here prevent long text break the layout-->
                     <!-- make id different from windows.swup global property -->
                     <slot></slot>
-                    <div class="footer col-span-2 onload-animation hidden lg:block">
-                        <Footer></Footer>
-                    </div>
+                    
                 </div>
             </main>
 
-            <div class="footer col-span-2 onload-animation block lg:hidden">
-                <Footer></Footer>
-            </div>
+            
         </div>
 
         <BackToTop></BackToTop>
