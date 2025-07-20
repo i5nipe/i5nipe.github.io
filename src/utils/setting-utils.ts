@@ -45,10 +45,7 @@ export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 	}
 
 	// Set the theme for Expressive Code
-	document.documentElement.setAttribute(
-		"dracula",
-		expressiveCodeConfig.theme,
-	);
+	document.documentElement.setAttribute("dracula", expressiveCodeConfig.theme);
 }
 
 export function setTheme(theme: LIGHT_DARK_MODE): void {

@@ -20,9 +20,9 @@ export type SiteConfig = {
 			url?: string;
 		};
 	};
-  googleAnalytics?: {
-    id: string
-  }
+	googleAnalytics?: {
+		id: string;
+	};
 	toc: {
 		enable: boolean;
 		depth: 1 | 2 | 3;
