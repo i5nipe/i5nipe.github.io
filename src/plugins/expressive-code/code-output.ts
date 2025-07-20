@@ -1,5 +1,7 @@
-import { definePlugin, AttachedPluginData } from "@expressive-code/core";
+import { AttachedPluginData, definePlugin } from "@expressive-code/core";
 import { h } from "@expressive-code/core/hast";
+
+//import { definePlugin, AttachedPluginData } from "@expressive-code/core";
 
 interface OutputData {
 	output: string[];
@@ -28,7 +30,7 @@ export function pluginCodeOutput() {
 					.getLines()
 					.findIndex((line) => !line.text.startsWith("> "));
 				context.codeBlock
-					.getLines(0, outputStart == -1 ? undefined : outputStart)
+					.getLines(0, outputStart === -1 ? undefined : outputStart)
 					.forEach((line) => {
 						// remove the "> "
 						line.editText(0, 2, "");
