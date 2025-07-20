@@ -31,12 +31,6 @@ export const siteConfig: SiteConfig = {
   },
   googleAnalytics: {
     id: "G-5XNK79GXX5"
-		position: "center", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
-		credit: {
-			enable: false, // Display the credit text of the banner image
-			text: "", // Credit text to be displayed
-			url: "", // (Optional) URL link to the original artwork or artist's page
-		},
 	},
 	toc: {
 		enable: true, // Display the table of contents on the right side of the post
@@ -44,7 +38,10 @@ export const siteConfig: SiteConfig = {
 	},
 	favicon: [
 		// Leave this array empty to use the default favicon
-    {src: '/favicon/favicon.ico'}
+    {src: '/favicon/favicon.ico',
+    theme: 'light',
+    sizes: '32x32',
+    }
 		// {
 		//   src: '/favicon/icon.png',    // Path of the favicon, relative to the /public directory
 		//   theme: 'light',              // (Optional) Either 'light' or 'dark', set only if you have different favicons for light and dark mode
@@ -56,13 +53,13 @@ export const siteConfig: SiteConfig = {
 export const navBarConfig: NavBarConfig = {
   links: [
     LinkPreset.Home,
-    //LinkPreset.Archive,
+    LinkPreset.Archive,
     LinkPreset.About,
-    //{
-    //  name: 'GitHub',
-    //  url: 'https://github.com/saicaca/fuwari',     // Internal links should not include the base path, as it is automatically added
-    //  external: true,                               // Show an external link icon and will open in a new tab
-    //},
+    {
+      name: 'GitHub',
+      url: 'https://github.com/i5nipe',     // Internal links should not include the base path, as it is automatically added
+      external: true,                               // Show an external link icon and will open in a new tab
+    },
   ],
 }
 
@@ -91,3 +88,9 @@ export const licenseConfig: LicenseConfig = {
   name: 'CC BY-NC-SA 4.0',
   url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
 }
+
+export const expressiveCodeConfig: ExpressiveCodeConfig = {
+	// Note: Some styles (such as background color) are being overridden, see the astro.config.mjs file.
+	// Please select a dark theme, as this blog theme currently only supports dark background color
+	theme: "github-dark",
+};
