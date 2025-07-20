@@ -1,25 +1,4 @@
 ---
-<<<<<<< HEAD
-import { Icon } from 'astro-icon/components'
-import DisplaySettings from './widget/DisplaySettings.svelte'
-import { LinkPreset, type NavBarLink } from '../types/config'
-import { navBarConfig, siteConfig } from '../config'
-import NavMenuPanel from './widget/NavMenuPanel.astro'
-import Search from './Search.svelte'
-import { LinkPresets } from '../constants/link-presets'
-import LightDarkSwitch from './LightDarkSwitch.svelte'
-import { url } from '../utils/url-utils'
-const className = Astro.props.class
-
-let links: NavBarLink[] = navBarConfig.links.map(
-  (item: NavBarLink | LinkPreset): NavBarLink => {
-    if (typeof item === 'number') {
-      return LinkPresets[item]
-    }
-    return item
-  },
-)
-=======
 import { Icon } from "astro-icon/components";
 import { navBarConfig, siteConfig } from "../config";
 import { LinkPresets } from "../constants/link-presets";
@@ -40,7 +19,6 @@ let links: NavBarLink[] = navBarConfig.links.map(
 		return item;
 	},
 );
->>>>>>> upstream/main
 ---
 <div id="navbar" class="z-50 onload-animation">
     <div class="absolute h-8 left-0 right-0 -top-8 bg-[var(--card-bg)] transition"></div> <!-- used for onload animation -->
@@ -67,21 +45,13 @@ let links: NavBarLink[] = navBarConfig.links.map(
         </div>
         <div class="flex">
             <!--<SearchPanel client:load>-->
-<<<<<<< HEAD
-            <Search client:load></Search>
-=======
             <Search client:only="svelte"></Search>
->>>>>>> upstream/main
             {!siteConfig.themeColor.fixed && (
                     <button aria-label="Display Settings" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="display-settings-switch">
                         <Icon name="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>
                     </button>
             )}
-<<<<<<< HEAD
-            <LightDarkSwitch client:load></LightDarkSwitch>
-=======
             <LightDarkSwitch client:only="svelte"></LightDarkSwitch>
->>>>>>> upstream/main
             <button aria-label="Menu" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 md:!hidden" id="nav-menu-switch">
                 <Icon name="material-symbols:menu-rounded" class="text-[1.25rem]"></Icon>
             </button>
@@ -105,15 +75,9 @@ function switchTheme() {
 function loadButtonScript() {
     let switchBtn = document.getElementById("scheme-switch");
     if (switchBtn) {
-<<<<<<< HEAD
-        switchBtn.addEventListener("click", function () {
-            switchTheme()
-        });
-=======
         switchBtn.onclick = function () {
             switchTheme()
         };
->>>>>>> upstream/main
     }
 
     let settingBtn = document.getElementById("display-settings-switch");
@@ -123,29 +87,17 @@ function loadButtonScript() {
             if (settingPanel) {
                 settingPanel.classList.toggle("float-panel-closed");
             }
-<<<<<<< HEAD
-        });
-=======
         };
->>>>>>> upstream/main
     }
 
     let menuBtn = document.getElementById("nav-menu-switch");
     if (menuBtn) {
-<<<<<<< HEAD
-        menuBtn.addEventListener("click", function () {
-=======
         menuBtn.onclick = function () {
->>>>>>> upstream/main
             let menuPanel = document.getElementById("nav-menu-panel");
             if (menuPanel) {
                 menuPanel.classList.toggle("float-panel-closed");
             }
-<<<<<<< HEAD
-        });
-=======
         };
->>>>>>> upstream/main
     }
 }
 
@@ -180,14 +132,10 @@ async function loadPagefind() {
         console.log('Pagefind load error, event dispatched.');
     }
 }
-<<<<<<< HEAD
-loadPagefind()
-=======
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadPagefind);
 } else {
     loadPagefind();
 }
->>>>>>> upstream/main
 </script>}

@@ -1,33 +1,18 @@
 <script lang="ts">
-<<<<<<< HEAD
-import { i18n } from '@i18n/translation'
-import I18nKey from '@i18n/i18nKey'
-import { getDefaultHue, getHue, setHue } from '@utils/setting-utils'
-import Icon from '@iconify/svelte'
-=======
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import Icon from "@iconify/svelte";
 import { getDefaultHue, getHue, setHue } from "@utils/setting-utils";
->>>>>>> upstream/main
 
 let hue = getHue();
 const defaultHue = getDefaultHue();
 
 function resetHue() {
-<<<<<<< HEAD
-  hue = getDefaultHue()
-}
-
-$: if (hue || hue === 0) {
-  setHue(hue)
-=======
 	hue = getDefaultHue();
 }
 
 $: if (hue || hue === 0) {
 	setHue(hue);
->>>>>>> upstream/main
 }
 </script>
 

@@ -1,31 +1,4 @@
 ---
-<<<<<<< HEAD
-import type { MarkdownHeading } from 'astro';
-import { siteConfig } from "../../config";
-
-interface Props {
-  class?: string
-  headings: MarkdownHeading[]
-}
-
-let { headings = []  } = Astro.props;
-
-let minDepth = 10;
-for (const heading of headings) {
-    minDepth = Math.min(minDepth, heading.depth);
-}
-
-const className = Astro.props.class
-
-const removeTailingHash = (text: string) => {
-    let lastIndexOfHash = text.lastIndexOf('#');
-    if (lastIndexOfHash != text.length - 1) {
-        return text;
-    }
-
-    return text.substring(0, lastIndexOfHash);
-}
-=======
 import type { MarkdownHeading } from "astro";
 import { siteConfig } from "../../config";
 
@@ -53,16 +26,12 @@ const removeTailingHash = (text: string) => {
 
 	return text.substring(0, lastIndexOfHash);
 };
->>>>>>> upstream/main
 
 let heading1Count = 1;
 
 const maxLevel = siteConfig.toc.depth;
 ---
-<<<<<<< HEAD
-=======
 {isPostsRoute &&
->>>>>>> upstream/main
 <table-of-contents class:list={[className, "group"]}>
     {headings.filter((heading) => heading.depth < minDepth + maxLevel).map((heading) =>
             <a href={`#${heading.slug}`} class="px-2 flex gap-2 relative transition w-full min-h-9 rounded-xl
@@ -88,12 +57,7 @@ const maxLevel = siteConfig.toc.depth;
     )}
     <div id="active-indicator" class:list={[{'hidden': headings.length == 0}, "-z-10 absolute bg-[var(--toc-btn-hover)] left-0 right-0 rounded-xl transition-all " +
         "group-hover:bg-transparent border-2 border-[var(--toc-btn-hover)] group-hover:border-[var(--toc-btn-active)] border-dashed"]}></div>
-<<<<<<< HEAD
-</table-of-contents>
-
-=======
 </table-of-contents>}
->>>>>>> upstream/main
 
 <script>
 class TableOfContents extends HTMLElement {
@@ -240,11 +204,7 @@ class TableOfContents extends HTMLElement {
                 this.init();
             }, { once: true });
         } else {
-<<<<<<< HEAD
-            console.warn('Animation element not found');
-=======
             console.debug('Animation element not found');
->>>>>>> upstream/main
         }
     };
 
@@ -298,12 +258,7 @@ class TableOfContents extends HTMLElement {
     };
 }
 
-<<<<<<< HEAD
-customElements.define("table-of-contents", TableOfContents);
-
-=======
 if (!customElements.get("table-of-contents")) {
     customElements.define("table-of-contents", TableOfContents);
 }
->>>>>>> upstream/main
 </script>
