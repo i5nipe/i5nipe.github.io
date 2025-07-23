@@ -1,5 +1,5 @@
 import deepmerge from "@fastify/deepmerge";
-import { type Child, type Properties, h } from "hastscript";
+import { type Child, h, type Properties } from "hastscript";
 import type {
 	Image,
 	Link,
@@ -9,8 +9,8 @@ import type {
 	RootContent,
 } from "mdast";
 import type { Plugin, Transformer } from "unified";
-import { visit } from "unist-util-visit";
 import type { Visitor } from "unist-util-visit";
+import { visit } from "unist-util-visit";
 
 type DeepPartial<T> = T extends object
 	? {
