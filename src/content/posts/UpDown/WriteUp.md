@@ -34,8 +34,7 @@ Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 Only two ports open, so let's check what this webserver is running.
 
-![Homepage](./homepage.png)
-> _Figure 1_: **Homepage of the site.**
+![Homepage](./homepage.png "Figure 1: HomePage of the site.")
 
 The site appears to have a functionality that's vulnerable to SSRF. As I wasn’t sure how to exploit that immediately, I continued with enumeration.
 At the bottom of the page, the virtual host `siteisup.htb` is mentioned. Accessing it showed the same homepage, so I ran a vhost brute-force with `ffuf`:
@@ -75,19 +74,15 @@ drwxrwxr-x 7 isnipe isnipe 4096 Jul  8 18:37 .git
 
 Reading the content of the file `.htaccess` I discovery that the webserver on `dev.siteisup.htb` will ony responde if the request have a special header, Like demostrated at _Figure 2_ and _Figure 3_.
 
-![Custom Header](./header_in_git.png)
-> _Figure 2_: **Contents of file '.htaccess'.**
+![Custom Header](./header_in_git.png "Figure 2: Contents of file '.htaccess'.")
 
-![Request with Header](./special_header_curl.png)
-> _Figure 3_: **Webserver accepting the request with the Custom Header.**
+![Request with Header](./special_header_curl.png "Figure 3: Webserver accepting the request with the Custom Header.")
 
 I created the following _Match & Replace_ rule in Caido proxy, and open the site on my browser.
 
-![Rule](./match_replace_caido.png)
-> _Figure 4_: **Rule to added the Header in all request to the vhost.**
+![Rule](./match_replace_caido.png "Figure 4: Rule to added the Header in all request to the vhost.")
 
-![Page on the browser](./admin_page_browser.png)
-> _Figure 5_: **'dev' page on the browser.**
+![Page on the browser](./admin_page_browser.png "Figure 5: 'dev' page on the browser.")
 
 Now we have access to a new functionality that uploads files to the server. I thought that will be easy to upload a php reverse shell because we have access to the source code of the application, but it as not that simple!
 
