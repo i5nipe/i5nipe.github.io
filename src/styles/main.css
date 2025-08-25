@@ -139,3 +139,29 @@
 .collapsed {
     height: var(--collapsedHeight);
 }
+
+.custom-md spoiler {
+  @apply px-1 py-0.5 rounded-md overflow-hidden 
+         transition-colors duration-500 ease-in-out 
+         transform hover:scale-105 hover:shadow-md;
+
+  /* Estado censurado */
+  background-color: var(--primary); /* fundo roxo */
+  color: var(--primary);            /* texto rosa */
+
+  /* Se o spoiler tiver conteúdo interno, aplicar a cor também */
+  & > * {
+    color: var(--primary);
+    transition: color 0.5s ease-in-out;
+  }
+
+  /* Hover → revela o texto */
+  &:hover {
+    background-color: transparent; /* fundo desaparece */
+    color: white;
+  }
+
+  &:hover > * {
+    color: white; /* texto interno também muda */
+  }
+}
