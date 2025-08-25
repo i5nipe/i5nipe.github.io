@@ -17,7 +17,7 @@ const { class: className, basePath = "/" } = Astro.props;
 const html = await Astro.slots.render("default");
 const { document } = parseHTML(html);
 await (async () => {
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// biome-ignore lint: using dynamic imports
 	const modules: Record<string, any> = import.meta.glob(
 		"../../**/*.{jpeg,jpg,png,tiff,webp,gif,svg,avif}",
 	);
