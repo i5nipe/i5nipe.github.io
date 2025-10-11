@@ -196,7 +196,7 @@ Description:	Ubuntu 22.04.2 LTS
 Release:	22.04
 Codename:	jammy
 ```
-Now that we've confirmed it's really vulnerable, we can search for exploits on Google or use [Spoitus](https://sploitus.com). I eventually got to this github repository:
+Now that we've confirmed it's really vulnerable, we can search for exploits on Google or use [Sploitus](https://sploitus.com). I eventually got to this github repository:
 
 ::github{repo=sxlmnwb/CVE-2023-0386}
 
