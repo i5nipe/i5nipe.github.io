@@ -16,9 +16,9 @@ export const siteConfig: SiteConfig = {
 		fixed: true, // Hide the theme color picker for visitors
 	},
 	banner: {
-		enable: true,
-		src: "/cover.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
-		position: "bottom", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
+		enable: false,
+		src: "/Cover_dither.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+		position: "center", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
 		credit: {
 			enable: false, // Display the credit text of the banner image
 			text: "", // Credit text to be displayed
