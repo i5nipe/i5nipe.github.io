@@ -17,3 +17,8 @@ I started this blog to share my experiences, insights, and the knowledge I've ga
 - Follow me on [X (formerly Twitter)](https://x.com/i5nipe) for updates and more.
 
 Thank you for visiting my blog, and I hope you find the content useful and inspiring!
+
+Some great work I follow — worth checking out:
+- [Coaglio](https://coaglio.com)
+- [hexkaster](https://hexkaster.com)
+- [0xdf](https://0xdf.gitlab.io/)
